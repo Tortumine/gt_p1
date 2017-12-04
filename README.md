@@ -25,7 +25,11 @@ heuristique ?
 
 ## Liens utilies
 
-* [MathSciNet Distance](https://mathscinet.ams.org/mathscinet/freeTools.html?version=2)
+* [Wikipedia (fr)](https://fr.wikipedia.org/wiki/Probl%C3%A8me_du_cavalier)
+* [Algorithmique iii - Le problème du cavalier](http://zanotti.univ-tln.fr/ALGO/I51/Cavalier.html)
+* [Problème du cavalier](http://bayledes.free.fr/carres_magiques/Cavaliers.html)
+* [Knight’s Tour Analysis](http://interactivepython.org/runestone/static/pythonds/Graphs/KnightsTourAnalysis.html)
+* [Warnsdorff’s algorithm for Knight’s tour problem](http://www.geeksforgeeks.org/warnsdorffs-algorithm-knights-tour-problem/)
 * [Vis.js](http://visjs.org/)
     * [Examples](http://visjs.org/network_examples.html)
     * [Docs](http://visjs.org/docs/network/)
