@@ -30,6 +30,8 @@ heuristique ?
 * [Problème du cavalier](http://bayledes.free.fr/carres_magiques/Cavaliers.html)
 * [Knight’s Tour Analysis](http://interactivepython.org/runestone/static/pythonds/Graphs/KnightsTourAnalysis.html)
 * [Warnsdorff’s algorithm for Knight’s tour problem](http://www.geeksforgeeks.org/warnsdorffs-algorithm-knights-tour-problem/)
+* [Graphes et représentation de graphe](https://zestedesavoir.com/tutoriels/681/a-la-decouverte-des-algorithmes-de-graphe/727_bases-de-la-theorie-des-graphes/3352_graphes-et-representation-de-graphe/)
+
 * [Vis.js](http://visjs.org/)
     * [Examples](http://visjs.org/network_examples.html)
     * [Docs](http://visjs.org/docs/network/)
