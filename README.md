@@ -2,7 +2,7 @@
 
 ## Ennoncé
 
-### 19. Enumération de circuits hamiltoniens - le parcours du cavalier. 
+### 5. Enumération de circuits hamiltoniens - le parcours du cavalier. 
 Etant donné un échiquier de dimension m*n, énumérer tous les circuits hamiltoniens réalisés en utilisant uniquement les mouvements du cavalierdans le jeu d'échecs. Même question, mais en énumérant le nombre de chemins hamiltoniens "ouverts" (origine et destination différentes).
 
 ### Quelques conseils :
