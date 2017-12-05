@@ -1,6 +1,7 @@
 //graphe interface by M. Rigo.
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "graphes.h"
 
 void initialiserGraphe(GRAPHE *g)
@@ -15,7 +16,6 @@ void initialiserGraphe(GRAPHE *g)
 int ajouterSommet(GRAPHE *g, int info)
 {
     SOMMET *pointeur;
-    g->maxS++;
     pointeur=(SOMMET *) malloc(sizeof(SOMMET));
     if (pointeur == NULL)
     {
@@ -38,6 +38,7 @@ int ajouterSommet(GRAPHE *g, int info)
             g->dernierSommet->suivant=pointeur;
             g->dernierSommet=pointeur;
         }
+        g->maxS++;//changed position of instruction
         g->nbS++;
         return pointeur->label;
     }

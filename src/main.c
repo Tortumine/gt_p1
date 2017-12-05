@@ -1,61 +1,56 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "graphes.h"
 
-#define m 5; //number of columns
-#define n 5; //number of lines
-bool canMove(int, pos1, int pos2)
-{
-
-}
+#define m 5 //number of columns
+#define n 5 //number of lines
 int main() {
     printf("Hello, World!\n");
 
+
+    /*--------------------------------
+    **THEOREME DE SHWENK POUR L'INITIALISATION**
+    ----------------------------------*/
     //ajout de tous les points
     GRAPHE* monGraphe;
+    monGraphe = malloc(m*n*sizeof(GRAPHE));
     initialiserGraphe(monGraphe);
-    size_t problemSize = m*n;
+    int problemSize = m*n;
     for(int i=0;i < problemSize;i++)
     {
         ajouterSommet(monGraphe, 0);
     }
-    int testPos = 0;
+    //add arc representing legal moves of the night on the board.
+    //not oriented graph, because knight can move in every direction
     for(int i=0;i < problemSize;i++)
     {
         //Upper position left :
-
-        if(((i/m) >= 2) && ((i%m) > 0))
-        testPos = i - 1 - 2*n;
-        if(isInTheGraph(testPos))
-            ajouterArc(monGraphe, i, testPos, 0);
+        if(!((i/m) < 2) && !((i%m) == 0))
+            ajouterArc(monGraphe, i, i - 1 - 2*n, 0);
         //Upper position right :
-        testPos = i + 1 - 2*n;
-        if(isInTheGraph(testPos))
-            ajouterArc(monGraphe, i, testPos, 0);
+        if(!((i/m) < 2) && !((i%m) == m-1))
+            ajouterArc(monGraphe, i, i + 1 - 2*n, 0);      
         //Lower position left :
-        testPos = i - 1 + 2*n;
-        if(isInTheGraph(testPos))
-            ajouterArc(monGraphe, i, testPos, 0);
+         if(!((i/m) >= n-2) && !((i%m) == 0))
+            ajouterArc(monGraphe, i,  i - 1 + 2*n, 0); 
         //Lower position right :
-        testPos = i + 1 + 2*n;
-        if(isInTheGraph(testPos))
-            ajouterArc(monGraphe, i, testPos, 0);
+         if(!((i/m) >= n-2) && !((i%m) == m-1))
+            ajouterArc(monGraphe, i, i + 1 + 2*n, 0); 
         //Left position up :
-        testPos = i - 2 - n;
-        if(isInTheGraph(testPos))
-            ajouterArc(monGraphe, i, testPos, 0);
+        if(!((i%m) <= 1) && !((i/m) == 0))
+            ajouterArc(monGraphe, i, i - 2 - n, 0); 
         //Left position down :
-        testPos = i - 2 + n;
-        if(isInTheGraph(testPos))
-            ajouterArc(monGraphe, i, testPos, 0);
+        if(!((i%m) <= 1) && !((i/m) == n-1))
+            ajouterArc(monGraphe, i, i - 2 + n, 0); 
         //Right position up :
-        testPos = i + 2 - n;
-        if(isInTheGraph(testPos))
-            ajouterArc(monGraphe, i, testPos, 0);
+        if(!((i%m) >= m - 2) && !((i/m) == 0))
+            ajouterArc(monGraphe, i, i + 2 - n, 0);
         //Right position down :
-        testPos = i + 2 + n;
-        if(isInTheGraph(testPos))
-            ajouterArc(monGraphe, i, testPos, 0);
+        if(!((i%m) >= m - 2) && !((i/m) == n-1))
+            ajouterArc(monGraphe, i, i + 2 + n, 0);
     }
+
+    afficherGraphe(monGraphe);
 
     return 0;
 }
