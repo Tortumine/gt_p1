@@ -28,12 +28,54 @@ heuristique ?
 * [Wikipedia (fr)](https://fr.wikipedia.org/wiki/Probl%C3%A8me_du_cavalier)
 * [Algorithmique iii - Le problème du cavalier](http://zanotti.univ-tln.fr/ALGO/I51/Cavalier.html)
 * [Problème du cavalier](http://bayledes.free.fr/carres_magiques/Cavaliers.html)
+* [Graphs and Graph Algorithms](http://interactivepython.org/runestone/static/pythonds/Graphs/toctree.html)
 * [Knight’s Tour Analysis](http://interactivepython.org/runestone/static/pythonds/Graphs/KnightsTourAnalysis.html)
 * [Warnsdorff’s algorithm for Knight’s tour problem](http://www.geeksforgeeks.org/warnsdorffs-algorithm-knights-tour-problem/)
 * [Graphes et représentation de graphe](https://zestedesavoir.com/tutoriels/681/a-la-decouverte-des-algorithmes-de-graphe/727_bases-de-la-theorie-des-graphes/3352_graphes-et-representation-de-graphe/)
 
-* [Vis.js](http://visjs.org/)
-    * [Examples](http://visjs.org/network_examples.html)
-    * [Docs](http://visjs.org/docs/network/)
-    * [Download](http://visjs.org/index.html#download_install)
-* [Curl](https://curl.haxx.se/libcurl/c/sepheaders.html)
+# Algorithmes
+## Parcourt du cavalier
+### Circuits
+      FONCTION int Parcourt (case_origine, case_actuelle, possible_graph, 
+                        pile_visites, hauteur_actuelle, hauteur_max, nombre_chemins)
+      DEBUT
+         PUSH case_actuelle INTO pile_visites 
+         SI hauteur_actuelle < hauteur_max
+         DEBUT
+            POURCHAQUE case_suivante dans possible_graph
+            DEBUT
+               SI case_suivante EST_PRESENTE_DANS pile_visites
+               ALORS
+                  nombre_chemins = Parcourt(case_origine, casecase_suivante, possible_graph, 
+                           pile_visites, hauteur_actuelle++, hauteur_max, nombre_chemins)
+            FIN
+         FIN
+         
+         SINONSI case_origine EST_PRESENTE_DANS possible_graph
+            ALORS nombre_chemins++;
+         PULL case_actuelle FROM pile_visites
+         RETURN nombre_chemins
+      FIN
+      
+ ### Chemins
+ 
+      FONCTION int Parcourt (case_origine, case_actuelle, possible_graph, 
+                        pile_visites, hauteur_actuelle, hauteur_max, nombre_chemins)
+      DEBUT
+         PUSH case_actuelle INTO pile_visites 
+         SI hauteur_actuelle < hauteur_max
+         DEBUT
+            POURCHAQUE case_suivante dans possible_graph
+            DEBUT
+               SI case_suivante EST_PRESENTE_DANS pile_visites
+               ALORS
+                  nombre_chemins = Parcourt(case_origine, casecase_suivante, possible_graph, 
+                           pile_visites, hauteur_actuelle++, hauteur_max, nombre_chemins)
+            FIN
+         FIN
+         
+         SINON
+            ALORS nombre_chemins++;
+         PULL case_actuelle FROM pile_visites
+         RETURN nombre_chemins
+      FIN
