@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "graphes.h"
+#include "graphes/graphes.h"
 
 #define m 5 //number of columns
 #define n 5 //number of lines
