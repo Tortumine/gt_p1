@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "graphes/graphes.h"
+#include "cavalier/cavalier.h"
 
 #define m 5 //number of columns
 #define n 5 //number of lines
@@ -52,5 +53,6 @@ int main() {
 
     afficherGraphe(monGraphe);
 
+    bruteforceChemin(n,m,monGraphe,0);
     return 0;
 }
