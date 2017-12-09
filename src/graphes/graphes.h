@@ -37,7 +37,7 @@ void initialiserGraphe(GRAPHE *);
 
 int ajouterSommet(GRAPHE *, int info);
 
-void changerInfoSommet (Graphe *g, int sommet, int infos);
+void changerInfoSommet (GRAPHE *g, int sommet, int infos);
 
 int ajouterArc(GRAPHE *, int a, int b, int info);
 

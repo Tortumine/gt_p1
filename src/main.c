@@ -51,8 +51,17 @@ int main() {
             ajouterArc(monGraphe, i, i + 2 + n, 0);
     }
 
-    afficherGraphe(monGraphe);
-
-    bruteforceChemin(n,m,monGraphe,0);
+    u_int tmp=0;
+    for(int j=0;j<m*n;j++)
+    {
+       tmp = tmp + bruteforceChemin(n,m,monGraphe,j);
+    }
+    printf("Nombre de chemins trouvés dans une grille %d x %d : %d\n",m,n,tmp);
+    tmp=0;
+    for(int j=0;j<m*n;j++)
+    {
+        tmp = tmp + bruteforceCircuit(n,m,monGraphe,j);
+    }
+    printf("Nombre de circuits trouvés dans une grille %d x %d : %d\n",m,n,tmp);
     return 0;
 }

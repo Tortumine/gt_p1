@@ -12,7 +12,7 @@ void initialiserGraphe(GRAPHE *g)
     g->premierSommet=NULL;
     g->dernierSommet=NULL;
 }
-void changerInfoSommet (Graphe *g, int sommet, int infos)
+void changerInfoSommet (GRAPHE *g, int sommet, int infos)
 {
     SOMMET *psommet;
     psommet=g->premierSommet;
@@ -25,11 +25,10 @@ void changerInfoSommet (Graphe *g, int sommet, int infos)
     if (psommet == NULL)
     {
         printf("Erreur! Sommet introuvable\n");
-        return -1;
     }
     else /* on a trouve a */
     {
-        psommet->infos = infos;
+        psommet->info = infos;
     }
 }
 int ajouterSommet(GRAPHE *g, int info)
