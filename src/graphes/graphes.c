@@ -12,7 +12,26 @@ void initialiserGraphe(GRAPHE *g)
     g->premierSommet=NULL;
     g->dernierSommet=NULL;
 }
-
+void changerInfoSommet (Graphe *g, int sommet, int infos)
+{
+    SOMMET *psommet;
+    psommet=g->premierSommet;
+    /* on cherche le sommet donné*/
+    while (psommet != NULL)
+    {
+        if (psommet->label == sommet) break;
+        psommet=psommet->suivant;
+    }
+    if (psommet == NULL)
+    {
+        printf("Erreur! Sommet introuvable\n");
+        return -1;
+    }
+    else /* on a trouve a */
+    {
+        psommet->infos = infos;
+    }
+}
 int ajouterSommet(GRAPHE *g, int info)
 {
     SOMMET *pointeur;
@@ -142,6 +161,7 @@ int ajouterArc(GRAPHE *g, int a, int b, int info)
             }
             padj->dest=b;
             padj->info=info;
+            padj->cible=psommet2;
             g->nbA++;
         }
         return 0;
