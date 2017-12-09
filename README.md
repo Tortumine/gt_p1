@@ -1,5 +1,41 @@
 # Graph Theory Project 1
 
+## CMAKE
+La génération du makefile se fait via CMAKE en utilisant *CMakeLists.txt*. La racine du projet contient le *CMakeLists.txt* principal, il permet de génerer le projet et de le build. Chaque sous-répertoire contient également un *CMakeLists.txt* qui permet de build la librairie correspondante. 
+
+Structure générique:
+```
+|__ /src
+   |__ main.c
+   |__ /librairie
+      |__ fichier.c
+      |__ fichier.h
+```       
+Dans cet example, 2 *CMakeLists.txt* sont néséssaires:
+
+Le premier, dans le répertoire __src__.
+``` cmake
+cmake_minimum_required(VERSION 3.9)
+project(nom_du_projet C)
+
+add_subdirectory(librairie)
+
+set(CMAKE_C_STANDARD 99)
+
+add_executable(nom_du_projet main.c)
+target_link_libraries(nom_du_projet librairie)
+```
+Ce dernier contient une réfférence vers la libraires contenue dans le sous-répertoire (*add_subdirectory*) et une déclaraction de sible de build liée au projet (*target_link_libraries*).
+
+Le second *CMakeLists.txt*, dans le répertoire __librairie__,contient les instructions de build de la librairie.
+``` cmake
+set(libraire_source_files fichier.c fichier.h)
+add_library(libraire ${librairie_source_files})
+``` 
+Le *set* permet de définir les fichiers sources à inclure à la librairie (.c et .h). Le *add_library* permet de définir le nom de la librairie, c'est ce nom qui est réfférencé dans le *CMakeLists.txt* principal.
+
+Ainsi la compilation se fait plus aisément. Il est cependant néséssaire d'indiquer le chemin relatif des headers dans le *main.c* (*"librairei/fichier.h"*). Lorcequ'une nouvelle librairie doit être ajoutée au projet, un nouveau *CMakeList.txt* doit être crée dans le réprtoire conserné et une nouvelle réfférence vers cette librairie doit être définie au moyen d'un *add_subdirectory* et d'un *target_link_libraries*. Les librairies sans dépendances doivent êtres définies en premier.
+
 ## Ennoncé
 
 ### 5. Enumération de circuits hamiltoniens - le parcours du cavalier. 
