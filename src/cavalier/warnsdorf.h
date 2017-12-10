@@ -1,3 +1,4 @@
 //created by antoine sadzot
-
-void WarnsdorfClassique(int m)
+#include "../graphes/graphes.h"
+void warnsdorffClassique(int m);
+void WarnsdorffSquirrel (int m);
