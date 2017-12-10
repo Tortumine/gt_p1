@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{array}
+\usepackage{shortvrb}
+\usepackage{listings}
+\usepackage[fleqn]{amsmath}
+\usepackage{amsfonts}
+\usepackage{fullpage}
+\usepackage{enumerate}
+\usepackage{graphicx}             % import, scale, and rotate graphics
+\usepackage{subfigure}            % group figures
+\usepackage{alltt}
+\usepackage{url}
+\usepackage{indentfirst}
+\usepackage{eurosym}
+\usepackage{amsmath} 
+\usepackage{float}
+\usepackage[french,onelanguage,ruled,vlined]{algorithm2e}
+%\usepackage{algorithm, algpseudocode}
+%\usepackage{tabular}
+\usepackage[utf8]{inputenc}
+\usepackage{algpseudocode}
+
+%Définition du c pour les "listings"
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{CStyle}{
+    backgroundcolor=\color{backgroundColour},   
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C
+}
+
+
+\begin{document}
+\input{pagegarde.tex}	%Presentation du projet
+
+\clearpage
+\tableofcontents
+\clearpage
+
+\input{section1.tex}	%Presentation du projet
+\input{section2.tex}	%Recherches
+\input{section3.tex}	%Implémentation
+\input{section4.tex}	%Tests de performance
+\input{section5.tex}	%Conclsion
+
+
+	
+\end{document}
