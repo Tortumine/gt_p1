@@ -3,8 +3,8 @@
 #include "graphes/graphes.h"
 #include "cavalier/cavalier.h"
 
-#define m 5 //number of columns
-#define n 5 //number of lines
+#define m 6 //number of columns
+#define n 4 //number of lines
 int main() {
     printf("Hello, World!\n");
 
@@ -17,51 +17,42 @@ int main() {
     monGraphe = malloc(m*n*sizeof(GRAPHE));
     initialiserGraphe(monGraphe);
     int problemSize = m*n;
+
+    //Mouvement possibles du cavalier
+    int X[8] = { 2, 1, -1, -2, -2, -1, 1, 2 };
+    int Y[8] = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
+    //Variable temporaire initialisation des mouvements
+    int tmpX = 0;
+    int tmpY = 0;
+
+    //Initialisation des noeuds
     for(int i=0;i < problemSize;i++)
     {
         ajouterSommet(monGraphe, 0);
     }
     //add arc representing legal moves of the night on the board.
     //not oriented graph, because knight can move in every direction
-    for(int i=0;i < problemSize;i++)
+
+    for(int y = 0;y<n;y++)
     {
-        //Upper position left :
-        if(!((i/m) < 2) && !((i%m) == 0))
-            ajouterArc(monGraphe, i, i - 1 - 2*n, 0);
-        //Upper position right :
-        if(!((i/m) < 2) && !((i%m) == m-1))
-            ajouterArc(monGraphe, i, i + 1 - 2*n, 0);      
-        //Lower position left :
-         if(!((i/m) >= n-2) && !((i%m) == 0))
-            ajouterArc(monGraphe, i,  i - 1 + 2*n, 0); 
-        //Lower position right :
-         if(!((i/m) >= n-2) && !((i%m) == m-1))
-            ajouterArc(monGraphe, i, i + 1 + 2*n, 0); 
-        //Left position up :
-        if(!((i%m) <= 1) && !((i/m) == 0))
-            ajouterArc(monGraphe, i, i - 2 - n, 0); 
-        //Left position down :
-        if(!((i%m) <= 1) && !((i/m) == n-1))
-            ajouterArc(monGraphe, i, i - 2 + n, 0); 
-        //Right position up :
-        if(!((i%m) >= m - 2) && !((i/m) == 0))
-            ajouterArc(monGraphe, i, i + 2 - n, 0);
-        //Right position down :
-        if(!((i%m) >= m - 2) && !((i/m) == n-1))
-            ajouterArc(monGraphe, i, i + 2 + n, 0);
+        for (int x = 0; x < m; x++)
+        {
+            for(int i=0;i<8;i++)
+            {
+                //calcul des liens
+                tmpX=x+X[i];
+                tmpY=y+Y[i];
+                if(tmpX >= 0 && tmpY >= 0 && tmpX < m && tmpY < n)
+                {
+                    //ajout d'un lien si la case calculée est dans les limites de l'échequier
+                    ajouterArc(monGraphe,x+m*y,tmpX+m*tmpY, 0);
+                }
+            }
+        }
     }
 
-    u_int tmp=0;
-    for(int j=0;j<m*n;j++)
-    {
-       tmp = tmp + bruteforceChemin(n,m,monGraphe,j);
-    }
-    printf("Nombre de chemins trouvés dans une grille %d x %d : %d\n",m,n,tmp);
-    tmp=0;
-    for(int j=0;j<m*n;j++)
-    {
-        tmp = tmp + bruteforceCircuit(n,m,monGraphe,j);
-    }
-    printf("Nombre de circuits trouvés dans une grille %d x %d : %d\n",m,n,tmp);
+    afficherGraphe(monGraphe);
+    BruteForceChemins(m,n,monGraphe);
     return 0;
 }
