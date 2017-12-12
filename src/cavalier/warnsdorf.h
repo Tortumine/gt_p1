@@ -1,4 +1,6 @@
 //created by antoine sadzot
+#include <stdbool.h>
 #include "../graphes/graphes.h"
-void warnsdorffClassique(int m);
-void WarnsdorffSquirrel (int m);
+bool warnsdorffClassique(int m);
+bool WarnsdorffSquirrel (int m);
+bool WarnsdorffClassiqueMatrice(int m);

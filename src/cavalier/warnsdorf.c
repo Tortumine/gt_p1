@@ -20,9 +20,9 @@ void CreerBoard(int m, GRAPHE* monGraphe);
 void DiminuerPoidVoisins(SOMMET* monSommet);
 int DeterminerSuivant(SOMMET* monSommet);
 bool parcoursCorrect(SOMMET* monSommet,int* parcours, size_t increment,int m);
-bool TestSquirrel(int* A, int* B, int m);
+bool TestSquirrel(int* A, int m);
 
-void warnsdorffClassique(int m)
+bool warnsdorffClassique(int m)
 {
     GRAPHE* monGraphe;
     int* parcours;
@@ -37,7 +37,7 @@ void warnsdorffClassique(int m)
     size_t visite = 0; //indice de la case visitée.
     SOMMET* monSommet = monGraphe->premierSommet;
     bool correct = false;
-    while (!correct && increment < ((m*m)-1))
+    while (increment < ((m*m)-1))
     {
         parcours[visite] = increment;//give the order in which the knight parcours the board
         monSommet->info = 0;
@@ -57,11 +57,11 @@ void warnsdorffClassique(int m)
         if (tmpPointer == NULL)
         {
             printf("Erreur de determination du sommet suivant\n");
-            return;
+            return false;
         }
         increment++;
 
-        correct = parcoursCorrect(monSommet, parcours, increment, m);
+        //correct = parcoursCorrect(monSommet, parcours, increment, m);
         //printf("passage numero : %zu\n", increment);
     }
     for(int i=0; i < m*m; i++)
@@ -72,32 +72,150 @@ void warnsdorffClassique(int m)
             break;
         }
     }
-    if (correct)
-        printf("tout est bien \n");
+    int *A = malloc(m*m*sizeof(int));
+    SOMMET* testParcours = monGraphe->premierSommet; 
+    for(int i=0; i<m*m;i++)
+    {
+        A[i]= testParcours->label;
+        testParcours = testParcours->suivant;
+    }
+    if (TestSquirrel(A,m))
+        return true;
     else
-        printf("Rien ne va plus\n");
+        return false;
     //impression du parcours
     /*int tmp = 0;
     for(int i=0; i<m; i++)
     {       
         for(int j=0; j<m; j++)
         {
-            printf(" ----");
+            printf(" -----");
         }
         printf("\n");
         for(int j=0; j<m; j++)
         {
-            printf("| %02d ",parcours[tmp]);
+            printf("| %3d ",parcours[tmp]);
             tmp++;
         }
         printf("|\n");
     }
     for(int j=0; j<m; j++)
     {
-        printf(" ----");
+        printf(" -----");
     }
     printf("\n");*/
 }
+bool WarnsdorffClassiqueMatrice(int m)
+{
+    int *A,*B;
+    int pos=0;
+    int iter=0;
+    int directions;
+    int futurePos=0;
+    int k;
+    int x,y,xP,yP;
+    int K[8][2] = { {-2,1}, {-1,2}, {1,2}, {2,1}, {2,-1}, {1,-2}, {-1,-2}, {-2,-1} };
+    A = malloc(m*m*sizeof(int));
+    B = malloc(m*m*sizeof(int));
+    int tmpPos[8];
+    for(int i=0;i<m*m;i++){
+        A[i]=-1;
+        B[i]=0;
+    }
+    //initialisation de B
+    for(int i=0;i<m*m;i++)
+    {
+        x = i/m;
+        y = i%m;
+        for(int k=0;k<8;k++)
+        {
+            xP = x + K[k][0];
+            yP = y + K[k][1];  
+            if(xP >= 0 && xP < m && yP >= 0 && yP < m)
+            {
+                B[i] += 1;
+            }
+        }
+    } 
+    while(iter < m*m)
+    {
+        A[pos] = iter;
+        B[pos] = 0;
+        iter++;
+        directions = 9;
+        k=0;
+        int parcoursArray = 0;//variable temporaire pour parcourir le tableau des directions possibles
+        for(int i=0; i <= parcoursArray; i++)
+            tmpPos[i] = -1;  
+        while(k<8)
+        {
+            x = (pos/m + K[k][0])*m;
+            y = pos%m + K[k][1];   
+            if((x/m >= 0) && (x/m < m) && (y >= 0) && (y < m) && A[x+y] == -1)
+            {
+                B[x+y] -= 1;
+                if(B[x+y] == directions)
+                {
+                    parcoursArray++;
+                    tmpPos[parcoursArray] = x+y;
+                }
+                else if(B[x+y] < directions)
+                {
+                    for(int i=0; i < 8; i++)
+                    {
+                        tmpPos[i] = -1;                      
+                    }
+                    tmpPos[0] = x+y;
+                    directions=B[x+y];
+                    parcoursArray=0;
+                }
+            }
+            k++; 
+        }
+        if(directions == 9)
+            break;
+        if(parcoursArray == 0)
+            pos = tmpPos[0];
+        else
+        {
+            do
+            {
+                pos = tmpPos[rand()%(parcoursArray+1)];
+            }while(pos == -1);
+        }
+        
+    }
+    bool resultat = TestSquirrel(A, m);
+
+    /*int tmp = 0;
+    for(int i=0; i<m; i++)
+    {       
+        for(int j=0; j<m; j++)
+        {
+            printf(" ---");
+        }
+        printf("\n");
+        for(int j=0; j<m; j++)
+        {
+            printf("|%3d",A[tmp]);
+            tmp++;
+        }
+        printf("|\n");
+    }
+    for(int j=0; j<m; j++)
+    {
+        printf(" -----");
+    }
+    printf("\n");*/
+
+    free(A);
+    free(B);
+    if(resultat)
+        return true;
+    else
+        return false;
+}
+
 bool parcoursCorrect(SOMMET* monSommet,int* parcours, size_t increment,int m)
 {
     ELTADJ* adj = monSommet->adj;
@@ -207,7 +325,6 @@ int DeterminerSuivant(SOMMET* monSommet)
             }
         }
         //l'indice d'un candidat dans le vecteur est pris au hasard
-        srand(time(NULL));
         sommetChoisi = candidats[rand()%parcours].label;
     }
     //free(candidats);
@@ -266,7 +383,7 @@ void CreerBoard(int m, GRAPHE* monGraphe)
     }
 }
 //Retranscription of the algorithm presented by Squirrel.
-void WarnsdorffSquirrel (int m)
+bool WarnsdorffSquirrel (int m)
 {
     //Retranscription de l'alogrithme pésenté par Squirrel dans
     //A Warnsdorff-Rule Algorithm for Knight's Tours on Square ChessBoards de 1996
@@ -304,27 +421,27 @@ void WarnsdorffSquirrel (int m)
         A[i]=-1;
         B[i]=0;
     }
-    c=-1;
+    c=0;
     t=0;
-    uv[0]=0;uv[1]=0;
+    uv[0]=1;uv[1]=1;
     xy[0]=0;xy[1]=0;
 
     //initialisation des tableaux contenant les conditions de permutations
-    //code érit de manière compacte pour ne pas prendre trop de place
+    //code compacte pour ne pas prendre trop de place
     uvZero[0][0]=m-1;uvZero[0][1]=m-2; uvZero[1][0]=2;uvZero[1][1]=2; uvZero[2][0]=m-8;uvZero[2][1]=1; uvZero[3][0]=7;uvZero[3][1]=m-3; uvZero[4][0]=-1;uvZero[4][1]=-1;
     uvUn[0][0]=m-1;uvUn[0][1]=m-2; uvUn[1][0]=2;uvUn[1][1]=2; uvUn[2][0]=m-6;uvUn[2][1]=((m-1)/2) + 5; uvUn[3][0]=-1;uvUn[3][1]=-1;
     uvDeux[0][0]=6;uvDeux[0][1]=1; uvDeux[1][0]=3;uvDeux[1][1]=1; uvDeux[2][0]=m-15;uvDeux[2][1]=4; uvDeux[3][0]=10;uvDeux[3][1]=m-2; uvDeux[4][0]=5;uvDeux[4][1]=(m/2)-3; uvDeux[5][0]=-1;uvDeux[5][1]=-1;
     uvTrois[0][0]=m-1;uvTrois[0][1]=m-2; uvTrois[1][0]=m-6;uvTrois[1][1]=m; uvTrois[2][0]=2;uvTrois[2][1]=5; uvTrois[3][0]=m-10;uvTrois[3][1]=3; uvTrois[4][0]=((m-1)/2)+1;uvTrois[4][1]=m-2; uvTrois[5][0]=-1;uvTrois[5][1]=-1;
     uvQuatre[0][0]=m-1;uvQuatre[0][1]=m-2; uvQuatre[1][0]=2;uvQuatre[1][1]=2; uvQuatre[2][0]=m-8;uvQuatre[2][1]=1; uvQuatre[3][0]=10;uvQuatre[3][1]=m-5; uvQuatre[4][0]=13;uvQuatre[4][1]=(m/2)+1; uvQuatre[5][0]=-1;uvQuatre[5][1]=-1;
     uvCinq[0][0]=m-1;uvCinq[0][1]=m-2; uvCinq[1][0]=2;uvCinq[1][1]=2; uvCinq[3][0]=-1;uvCinq[3][1]=-1;
-    if(m == 5%16)
+    /*if(m == 5%16)
     {
         uvCinq[2][0]=m-2;uvCinq[2][1]=((m-1)/2)-2;
     }
     else
-    {
+    {*/
         uvCinq[2][0]=m-2;uvCinq[2][1]=((m-1)/2)-6;
-    }
+    //}
     uvSix[0][0]=6;uvSix[0][1]=1; uvSix[1][0]=3;uvSix[1][1]=1; uvSix[2][0]=m-10;uvSix[2][1]=1; uvSix[3][0]=10;uvSix[3][1]=m-2; uvSix[4][0]=3;uvSix[4][1]=(m/2)+4; uvSix[5][0]=-1;uvSix[5][1]=-1;
     uvSept[0][0]=m-1;uvSept[0][1]=m-2; uvSept[1][0]=m-6;uvSept[1][1]=m; uvSept[2][0]=2;uvSept[2][1]=5; uvSept[3][0]=m-6;uvSept[3][1]=3; uvSept[4][0]=((m-1)/2)+1;uvSept[4][1]=m-2; uvSept[5][0]=-1;uvSept[5][1]=-1;
     //initialisation de la matrice B
@@ -338,20 +455,22 @@ void WarnsdorffSquirrel (int m)
                 if(xyP[0] >= 0 && xyP[0] < m && xyP[1] >= 0 && xyP[1] < m)
                 {
                     B[i*m+j] += 1;
+                    
                 }
             }
-            
         }
     //Boucle principale
     while(true)
     {
         A[xy[0]*m + xy[1]] = c;
+        B[xy[0]*m + xy[1]] = 0;
         c = c + 1;
-        z = 8;
+        z = 9;
         k = 0;
 
         //change move ordering if (x,y) == (u,v)
-        if (xy[0] == uv[0] && xy[1] == uv[1])
+        //+1 because uv work for arrays starting at 1
+        if ((xy[0] + 1 == uv[0]) && (xy[1] + 1 == uv[1]))
         {
             switch(m%8)
             {
@@ -403,14 +522,14 @@ void WarnsdorffSquirrel (int m)
                 uv[0]=uvSept[t][0];
                 uv[1]=uvSept[t][1];
                 break;
-            }        
+            }      
             t++;
         }
         //On parcours les huit directions possibles pour le cavalier. On determine la direction
-        //qui soit a le poids le plus faible et qui est la première dans dans l'ordre déterminé.
+        //qui a le poids le plus faible et qui est la première dans dans l'ordre déterminé.
         while(k<8)
         {
-            //Attention que les valeurs dans T sont comptées à partir de 1. Il faut donc diminuer de 1 pour avoir les vlaeurs justes
+            //Attention que les valeurs dans T sont comptées de 1 à 8. Il faut donc diminuer de 1 pour avoir les vlaeurs justes
             xyP[0] = xy[0] + K[T[k]-1][0];
             xyP[1] = xy[1] + K[T[k]-1][1];
             if(xyP[0] >= 0 && xyP[0] < m && xyP[1] >= 0 && xyP[1] < m && A[xyP[0]*m + xyP[1]] == -1)
@@ -420,29 +539,31 @@ void WarnsdorffSquirrel (int m)
                 {
                     xyPP[0] = xyP[0];
                     xyPP[1] = xyP[1];
-                    z = B[xyP[0]*m + xyP[1]];
+                    z=B[xyP[0]*m + xyP[1]];
                 }
             }
             k++; 
         }
         //next square
-        if(z == 8)
+        if(z == 9)
             break;
         else
         {
             xy[0] = xyPP[0];
             xy[1] = xyPP[1];
         }
-        /*printf("valeur de c : %d\n",c);
-        printf("valeur de la case : %d\n",xy[0]*m+xy[1]);*/
     }
-    if(TestSquirrel(A, B, m))
-        printf("Chemin Trouve");
-    else
-        printf("Erreur");
-    printf("\nSquirell termine\n");
+    if(TestSquirrel(A, m))
+    {
+        free(A);
+        free(B);
+        return true;
+    }
+    free(A);
+    free(B);
+    return false;
 }
-bool TestSquirrel(int* A, int* B, int m)
+bool TestSquirrel(int* A, int m)
 {
     int K[8][2]={{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2},{-1,-2},{-2,-1}};
     int parcouru = A[0];
@@ -450,45 +571,38 @@ bool TestSquirrel(int* A, int* B, int m)
     int tmpRecherche = 0;
     bool trouve;
     int k = 0;
-    int x,y;
 
-    for(int i=0; i < m*m ;i++)
-    {
-        B[i] = 0;
-    }
-    //on parcours tout le tableau A, dans l'ordre de passage du cavalier
+    //on parcourt tout le tableau A, dans l'ordre de passage du cavalier
     //Si on trouve la case suivante et qu'elle n'a pas encore été visitée, on marque dans B que la case actuelle a été visitée
     //Et on va à la case suivante.
-    while(parcouru < m*m - 2)
+    
+    while(parcouru < m*m-1)
     {
-        printf("Verifparcouru : %d\n",parcouru);
         trouve = false;
-        tmpRecherche = recherche;
+        
         k=0;
         while(!trouve && k < 8)
         {
+            tmpRecherche = recherche;
             tmpRecherche += K[k][0]*m;
             tmpRecherche += K[k][1];
-            x = tmpRecherche/m + K[k][0]*m;
-            y = tmpRecherche%m + K[k][1];
-            if(x >= 0 && x/m < m && y >= 0 && y%m < m)
+            if((tmpRecherche/m >= 0) && (tmpRecherche/m < m) && (tmpRecherche%m >=0) && (tmpRecherche%m < m))
             {
-                printf("dans la cond x : %d, y : %d\n",x,y);
-
-            printf("tmprecherche : %d\n",tmpRecherche);
-                printf("A : %d\n",A[tmpRecherche]);
                 if (A[tmpRecherche] == parcouru+1)
                 {
                     trouve = true;
                     recherche=tmpRecherche;
-                    //B[tmpRecherche] = 1;
                 }
             }
            
             k++;
         }
+        /*printf("position de A : %d\n",recherche);
+        printf("On est alles jusqu'a : %d\n",parcouru);*/
         if(!trouve)
+        {
             return false;
+        }
         parcouru++;
     }
     return true;
