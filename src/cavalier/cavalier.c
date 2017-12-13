@@ -8,6 +8,8 @@
 void BruteForceChemins(int m,int n,GRAPHE* monGraphe)
 {
     int i=0;
+    int j=0;
+    int k=0;
     int tmp=0;
     int* result;
 
@@ -24,10 +26,10 @@ void BruteForceChemins(int m,int n,GRAPHE* monGraphe)
 
     printf("\nNombre de chemins trouvés dans une grille %d x %d : %d\n",m,n,tmp);
     printf("Détail du resultats: chemins possibles en fonction de la case de départ.\n\n");
-    for(int j = 0;j<n;j++)
+    for(j = 0;j<n;j++)
     {
         printf("\t");
-        for (int k = 0; k < m; k++)
+        for (k = 0; k < m; k++)
         {
             printf("% 6d\t",result[k+m*j]);
         }
@@ -37,6 +39,8 @@ void BruteForceChemins(int m,int n,GRAPHE* monGraphe)
 void BruteForceCircuits(int m,int n,GRAPHE* monGraphe)
 {
     int i=0;
+    int j=0;
+    int k=0;
     int tmp=0;
     int* result=malloc(n*m*(sizeof(int)));
         for(i=0;i<m*n;i++)
@@ -48,10 +52,10 @@ void BruteForceCircuits(int m,int n,GRAPHE* monGraphe)
 
     printf("Nombre de circuits trouvés dans une grille %d x %d : %d\n",m,n,tmp);
     printf("Détail du resultats: circuits possibles en fonction de la case de départ.\n\n");
-    for(int j = 0;j<n;j++)
+    for(j = 0;j<n;j++)
     {
         printf("\t");
-        for (int k = 0; k < m; k++)
+        for (k = 0; k < m; k++)
         {
             printf("% 6d\t",result[k+m*j]);
         }
