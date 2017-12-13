@@ -29,7 +29,7 @@ void BruteForceChemins(int m,int n,GRAPHE* monGraphe)
         printf("\t");
         for (int k = 0; k < m; k++)
         {
-            printf("%05d\t",result[k+m*j]);
+            printf("% 6d\t",result[k+m*j]);
         }
         printf("\n");
     }
@@ -53,7 +53,7 @@ void BruteForceCircuits(int m,int n,GRAPHE* monGraphe)
         printf("\t");
         for (int k = 0; k < m; k++)
         {
-            printf("%05d\t",result[k+m*j]);
+            printf("% 6d\t",result[k+m*j]);
         }
         printf("\n");
     }

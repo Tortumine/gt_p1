@@ -4,11 +4,8 @@
 #include "cavalier/cavalier.h"
 
 #define m 6 //number of columns
-#define n 4 //number of lines
+#define n 6 //number of lines
 int main() {
-    printf("Hello, World!\n");
-
-
     /*--------------------------------
     **THEOREME DE SHWENK POUR L'INITIALISATION**
     ----------------------------------*/
