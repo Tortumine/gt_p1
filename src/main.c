@@ -1,67 +1,167 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <ctype.h>
+#include <stdbool.h>
 #include "graphes/graphes.h"
 #include "cavalier/cavalier.h"
+#include "cavalier/warnsdorf.h"
 
-#define m 5 //number of columns
-#define n 5 //number of lines
+#define iterMax 100
+
 int main() {
-    printf("Hello, World!\n");
-
-
-    /*--------------------------------
-    **THEOREME DE SHWENK POUR L'INITIALISATION**
-    ----------------------------------*/
-    //ajout de tous les points
-    GRAPHE* monGraphe;
-    monGraphe = malloc(m*n*sizeof(GRAPHE));
-    initialiserGraphe(monGraphe);
-    int problemSize = m*n;
-    for(int i=0;i < problemSize;i++)
+    srand(time(NULL));
+    int choix;
+    int m,n, iterations;
+    int* A;
+    int imprim = 1;
+    int continuer = 111;
+    bool reussi = true;
+    while(continuer == 111 || continuer == 79)
     {
-        ajouterSommet(monGraphe, 0);
-    }
-    //add arc representing legal moves of the night on the board.
-    //not oriented graph, because knight can move in every direction
-    for(int i=0;i < problemSize;i++)
+    printf("Programme de résolution du probleme du cavalier\n\n");
+    do{
+        choix=0;
+        printf("Voici les différents choix possibles\n\n");
+        printf("1. Trouver un chemin hamiltonnien avec l'heuristique de warnsdorff\n");
+        printf("2. Trouver un circuit hamiltonnien avec l'heuristique de warnsdorff\n");
+        printf("3. Trouver un chemin hamiltonnien avec l'algorithme de Squirrel\n");
+        printf("4. Trouver un chemin hamiltonien sur un échiquier de taille 3*m\n");
+        printf("\n");
+        printf("Votre choix : ");
+        do
+            choix = getchar();
+        while(isspace(choix));
+    }while(choix > '6' || choix < '1');
+    printf("\n");
+    switch (choix)
     {
-        //Upper position left :
-        if(!((i/m) < 2) && !((i%m) == 0))
-            ajouterArc(monGraphe, i, i - 1 - 2*n, 0);
-        //Upper position right :
-        if(!((i/m) < 2) && !((i%m) == m-1))
-            ajouterArc(monGraphe, i, i + 1 - 2*n, 0);      
-        //Lower position left :
-         if(!((i/m) >= n-2) && !((i%m) == 0))
-            ajouterArc(monGraphe, i,  i - 1 + 2*n, 0); 
-        //Lower position right :
-         if(!((i/m) >= n-2) && !((i%m) == m-1))
-            ajouterArc(monGraphe, i, i + 1 + 2*n, 0); 
-        //Left position up :
-        if(!((i%m) <= 1) && !((i/m) == 0))
-            ajouterArc(monGraphe, i, i - 2 - n, 0); 
-        //Left position down :
-        if(!((i%m) <= 1) && !((i/m) == n-1))
-            ajouterArc(monGraphe, i, i - 2 + n, 0); 
-        //Right position up :
-        if(!((i%m) >= m - 2) && !((i/m) == 0))
-            ajouterArc(monGraphe, i, i + 2 - n, 0);
-        //Right position down :
-        if(!((i%m) >= m - 2) && !((i/m) == n-1))
-            ajouterArc(monGraphe, i, i + 2 + n, 0);
+        case '1' : 
+            printf("Algorithme base sur l'heuristique de Warnsdorff avec departage aleatoire\n");
+            printf("Cet algorithme ne garantit pas de trouver un chemin a coup sur\n");
+            printf("\n");
+            do{
+                printf("Nombre de lignes : ");
+                do
+                    scanf("%d",&n);
+                while(isspace(n));
+                printf("Nombre de colonnes : ");
+                do
+                    scanf("%d",&m);
+                while(isspace(m));
+            }while(n < 1 && m < 1);
+            A = malloc(m*n*sizeof(int));
+            iterations=0;
+            do
+            {
+                WarnsdorffNFoisM(A,n,m);
+                iterations++;
+            }while(iterations < iterMax && !TestValideChemin(A,n,m));
+            if(iterations == iterMax)
+                printf("Aucun chemin n'a ete trouve apres 100 iterations\n");
+            else
+                printf("Un chemin a ete trouve apres %d iteration(s)\n",iterations);
+        break;
+        case '2' : 
+            printf("Algorithme base sur l'heuristique de Warnsdorff avec departage aleatoire\n");
+            printf("Cet algorithme ne garantit pas de trouver un circuit a coup sur\n");
+            printf("\n");
+            do{
+                printf("Nombre de lignes : ");
+                 do
+                    scanf("%d",&n);
+                while(isspace(n));
+                printf("Nombre de colonnes : ");
+                do
+                    scanf("%d",&m);
+                while(isspace(m));
+            }while(n < 1 && m < 1);
+            A = malloc(m*n*sizeof(int));
+            iterations=0;
+            do
+            {
+                WarnsdorffNFoisM(A,n,m);
+                iterations++;
+            }while(iterations < 10000 && !TestValideCircuit(A,n,m));
+            if(iterations == 10000)
+                printf("Aucun circuit n'a ete trouve apres %d iterations\n",iterations);
+            else
+                printf("Un circuit a ete trouve apres %d iteration(s)\n",iterations);
+        break;
+        case '3' : 
+            printf("Algorithme base sur les travaux de D. Squirrel\n");
+            printf("Cet algorithme garantit de trouver un chemin pour un echiquier valide\n");
+            printf("\n");
+            do{
+                printf("Nombre de lignes : ");
+                do
+                    scanf("%d",&n);
+                while(isspace(choix));
+                if(n < 5)
+                    printf("Valeur trop petite, aucun chemin ne peut etre trouve\n");
+            }while(n < 5);
+            A = malloc(n*n*sizeof(int));
+            iterations=0;
+            m = n;
+            do
+            {
+                Squirrel(A,n);
+                iterations++;
+            }while(iterations < iterMax && !TestValideChemin(A,n,n));
+            if(iterations == iterMax)
+                printf("Aucun chemin n'a ete trouve apres 100 iterations\n");
+            else
+                printf("Un chemin a ete trouve apres %d iteration(s)\n",iterations);
+        break;
+        case '4' :
+            printf("Algorithme base sur les travaux de Shun-Shii Lin\n");
+            printf("Cet algorithme garantit de trouver un chemin pour un echiquier valide\n");
+            printf("\n");
+            do{
+                printf("Nombre de colonnes : ");
+                do
+                    scanf("%d",&m);
+                while(isspace(choix));
+            }while(m < 1);
+            n=3;
+            A = malloc(n*m*sizeof(int));
+            iterations=0;
+            if(m<4 || m==5 || m==6)
+            {
+                printf("Il est impossible de trouver un chemin hamiltonnien dans ce graphe\n");
+                imprim = 0;
+                break;
+            }
+            do
+            {
+                reussi = ArbitraireTroisFoisM(A, m);
+                iterations++;
+            }while(iterations < iterMax && !TestValideChemin(A,n,m));
+            if(reussi == false)
+                printf("Aucun chemin n'a pu etre trouve\n");
+            else if(iterations == iterMax)
+                printf("Aucun chemin n'a ete trouve apres 100 iterations\n");
+            else
+                printf("Un chemin a ete trouve apres %d iteration(s)\n",iterations);
+        break;
     }
-
-    u_int tmp=0;
-    for(int j=0;j<m*n;j++)
+    if(imprim == 1)
+        do{ 
+            printf("\nVoulez vous imprimer le résultat dans le fichier Chemin.txt? (o/n) : ");
+            do
+                imprim = getchar();
+            while(isspace(imprim));
+        }while(imprim != 111 && imprim != 79 && imprim != 110 && imprim != 78);
+    if(imprim == 111 || imprim == 79 && imprim == 1)
     {
-       tmp = tmp + bruteforceChemin(n,m,monGraphe,j);
+        PrintBoard(A,n, m);
     }
-    printf("Nombre de chemins trouvés dans une grille %d x %d : %d\n",m,n,tmp);
-    tmp=0;
-    for(int j=0;j<m*n;j++)
-    {
-        tmp = tmp + bruteforceCircuit(n,m,monGraphe,j);
-    }
-    printf("Nombre de circuits trouvés dans une grille %d x %d : %d\n",m,n,tmp);
-    return 0;
+    free(A);
+    do{
+        printf("\nVoulez vous recommencer? (o/n) : ");
+         do
+            continuer = getchar();
+        while(isspace(continuer));
+    }while(continuer != 111 && continuer != 79 && continuer != 110 && continuer != 78);
+} 
 }

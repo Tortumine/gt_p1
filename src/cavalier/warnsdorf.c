@@ -11,10 +11,6 @@
 #include "../graphes/graphes.h"
 #include "../graphes/graphes.c"
 
-//fonctions propres au fichier
-bool TestValideRect(int* A, int n, int m);
-void PrintBoard(int* A, int n, int m);
-
 
 //Génération de chemin hamiltonnien représentant les mouvements du cavalier sur un échiquier carré
 //Graphe stocké sous forme de matrice
@@ -22,10 +18,10 @@ void PrintBoard(int* A, int n, int m);
 //algorithme inspiré de celui de Squirrel car simple et rapide. Au détriment d'un stockage par l'interface "graphe"
 //départage aléatoire entre les cellules de même poids
 //m = taille d'un côté de l'échiquier
-//Renvoie vrai si le chemin généré est valide. Renvoie faux sinon
-bool WarnsdorffClassique(int m)
+//A est le vecteur contenant le chemin
+void WarnsdorffClassique(int *A, int m)
 {
-    int *A,*B;//A contient le chemin généré. B contient le poids de chaque cellule
+    int *B;//B contient le poids de chaque cellule
     int pos=0;//contient l'élément à visiter dans le vecteur A
     int iter=0;//Numero de passage du chemin des cellules stockées dans A
     int moinsDePoids;//Poids de la potentielle prochaine cellule
@@ -35,7 +31,6 @@ bool WarnsdorffClassique(int m)
     int K[8][2] = { {-2,1}, {-1,2}, {1,2}, {2,1}, {2,-1}, {1,-2}, {-1,-2}, {-2,-1} };
     int tmpPos[8];//contient les cellules candidates de même poids
     int parcoursArray = 0; //variable temporaire pour parcourir le tableau des directions possibles
-    A = malloc(m*m*sizeof(int));
     B = malloc(m*m*sizeof(int));
     for(int i=0;i<m*m;i++){
         A[i]=-1;
@@ -116,25 +111,24 @@ bool WarnsdorffClassique(int m)
         }
     }
     //On teste la validité du labyrinthe
-    bool resultat = TestValideRect(A,m, m);
+    //bool resultat = TestValideCircuit(A,m, m);
     
     //Bon ou mauvais, on imprime ce qu'on a
-    PrintBoard(A, m, m);
+    //PrintBoard(A, m, m);
     
-    free(A);
     free(B);
-    if(resultat)
+    /*if(resultat)
         return true;
     else
-        return false;
+        return false;*/
 }
+
 //Génération de chemin hamiltonnien représentant les mouvements du cavalier sur un échiquier rectangulaire
 //Graphe stocké sous forme de matrice
 //n = nombre de lignes de l'échiquier
 //m = nombre de colonnes de l'échiquier
 //A = matrice contenant l'ordre de parcours
-//Renvoie vrai si le chemin généré est valide. Renvoie faux sinon
-bool WarnsdorffNFoisM(int *A, int n,int m)
+void WarnsdorffNFoisM(int *A, int n,int m)
 {
     int *B;//B contient le poids de chaque cellule
     int pos=0;//contient l'élément à visiter dans le vecteur A
@@ -228,24 +222,75 @@ bool WarnsdorffNFoisM(int *A, int n,int m)
         }
         
     }
-    //A la fin, on teste le résultat
-    bool resultat = TestValideRect(A, n, m);
-
-    //Bon ou mauvais, on imprime ce qu'on a
-    PrintBoard(A, m, m);
-
     free(B);
-    if(resultat)
-        return true;
-    else
-        return false;
 }
-//Permet de tester la validité du chemin hamiltonien
+
+//Permet de tester la validité d'un circuit hamiltonien
+//A est la matrice contenant l'ordre de parcours
+//n est le nombre de lignes
+//m est le nombre de colonnes
+//Renvoie vrai si le circuit soumis est correct. Renvoie faux sinon
+bool TestValideCircuit(int* A, int n, int m)
+{
+    //Vecteur de déplacements possibles du cavalier
+    int K[8][2]={{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2},{-1,-2},{-2,-1}};
+    int parcouru = A[0];//variable qui contient la valeur de la cellule de A visitée
+    int recherche = 0;//variable de parcours de A. Suit le chemin
+    int tmpRecherche = 0;//variable temporaire pour la recherche de la prochaine cellule
+    bool trouve;//cellule suivant trouvée
+    int k = 0;//parcours de K
+
+    //on parcourt tout le tableau A, dans l'ordre de passage du cavalier
+    //Si on trouve la case contenant la valeur suivante, on s'y déplace
+    //Si on ne la trouve pas, le chemin n'est pas valide
+    while(parcouru < n*m-1)
+    {
+        trouve = false;
+        
+        k=0;
+        while(!trouve && k < 8)
+        {
+            tmpRecherche = recherche;
+            tmpRecherche += K[k][0]*m;
+            tmpRecherche += K[k][1];
+            if((tmpRecherche/m >= 0) && (tmpRecherche/m < n) && (tmpRecherche%m >=0) && (tmpRecherche%m < m))
+            {
+                if (A[tmpRecherche] == parcouru+1)
+                {
+                    trouve = true;
+                    recherche=tmpRecherche;
+                }
+            }
+            k++;
+        }
+        if(!trouve)
+        {
+            return false;
+        }
+        parcouru++;
+    }
+    //Si le circuit est valide, la premiere case est accessible par la dernier case
+    for(k=0;k<8;k++)
+    {
+        tmpRecherche = recherche;
+        
+        tmpRecherche += K[k][0]*m;
+        tmpRecherche += K[k][1];
+        if((tmpRecherche/m >= 0) && (tmpRecherche/m < n) && (tmpRecherche%m >=0) && (tmpRecherche%m < m))
+            if(A[tmpRecherche] == 0)
+            {
+                return true;
+            }
+    }
+    return false;
+}
+
+//Permet de tester la validité d'un chemin hamiltonien
 //A est la matrice contenant l'ordre de parcours
 //n est le nombre de lignes
 //m est le nombre de colonnes
 //Renvoie vrai si le chemin soumis est correct. Renvoie faux sinon
-bool TestValideRect(int* A, int n, int m)
+bool TestValideChemin(int* A, int n, int m)
 {
     //Vecteur de déplacements possibles du cavalier
     int K[8][2]={{-2,1},{-1,2},{1,2},{2,1},{2,-1},{1,-2},{-1,-2},{-2,-1}};
@@ -286,12 +331,14 @@ bool TestValideRect(int* A, int n, int m)
     }
     return true;
 }
+
 //Retranscription de l'algorithme de Douglas Squirrel, inspiré de l'heurisitque de Warnsdorff
 //Pour un échiquier carré de taille m*m, génère un chemin hamiltonien 
 //Correspondant au problème du cavalier
+//A est le vecteur contenant le chemin
 //Le départage entre des cases de même poids est déterminé selon la dimension de l'échiquier
 //Renvoie vrai si le chemin généré est valide. Renvoie faux sinon
-bool Squirrel (int m)
+void Squirrel (int* A, int m)
 {
     //Retranscription de l'alogrithme pésenté par Squirrel dans
     //A Warnsdorff-Rule Algorithm for Knight's Tours on Square ChessBoards de 1996
@@ -313,7 +360,7 @@ bool Squirrel (int m)
     //xyP = coordonnées temporaires pour interagir avec la matrice B
     //xyPP = coordonnées temporaires pour determiner la futur case à visiter
     //uv[][]* = matrices contenant la condition de permutation pour chaque valeur de mod8
-    int *A, *B;
+    int *B;
     int K[8][2] = { {-2,1}, {-1,2}, {1,2}, {2,1}, {2,-1}, {1,-2}, {-1,-2}, {-2,-1} };
     int T[8];
     int c;
@@ -344,7 +391,6 @@ bool Squirrel (int m)
     uvSept[0][0]=m-1;uvSept[0][1]=m-2; uvSept[1][0]=m-6;uvSept[1][1]=m; uvSept[2][0]=2;uvSept[2][1]=5; uvSept[3][0]=m-6;uvSept[3][1]=3; uvSept[4][0]=((m-1)/2)+1;uvSept[4][1]=m-2; uvSept[5][0]=-1;uvSept[5][1]=-1;
     
     //initialisation des variables 
-    A = malloc(m*m*sizeof(int));
     B = malloc(m*m*sizeof(int));
     for(int i=0;i<m*m;i++)
     {
@@ -460,54 +506,39 @@ bool Squirrel (int m)
         xy[0] = xyPP[0];
         xy[1] = xyPP[1];
     }
-    //Valide ou non, on imprime le résultat
-    PrintBoard(A, m, m);
-
-    if(TestValideRect(A,m, m))
-    {
-        free(A);
-        free(B);
-        return true;
-    }
-    else
-    {
-        free(A);
-        free(B);
-        return false;
-    }  
+    free(B); 
 }
+
 //Utilisation de l'algorithme de Shun-Shii Lin et Chung-Liang Wei
 //Dans le cas où l'échiquier comporte trois lignes et m colonnes
+//A est le vecteur contenant le chemin
 //Renvoie vrai si le chemin généré est valide. Renvoie faux sinon
-bool ArbitraireTroisFoisM(int m)
+bool ArbitraireTroisFoisM(int* A, int m)
 {
    //Algorithme pour trouver un tour du cavalier par Shun-Shii Lin
    //Implementation pour un échiquier de taille 3*m
    //Basé en partie sur la fonction WarnsdorffNFoisM
-
-   int *A = malloc(m*3*sizeof(int));//Vecteur repésentant l'échiquier
    int iter=0;//variable utilisée pour la génération de chemin pour m<=12
 
    //aucun parcours n'existe pour ces dimensions d'échiquiers
-   if(m<4 || m==5 || m==6)
-   {
-       printf("Il est impossible de trouver un chemin hamiltonnien dans ce graphe\n");
-       free(A);
-       return false;
-   }
+   
    //pour un échiquier plus petit que 10 et ne satisfaisant pas les conditions précédentes,
    //Le parcours est généré en une fois
-   else if(m <= 12)
+   if(m <= 12)
    {
        //plusieurs générations aléatoires peuvent être nécessaires
        //avant de trouver un chemin correct
-        while(!WarnsdorffNFoisM(A, 3, m) && iter < 100)
-        {iter++;} 
-        free(A);
+        do
+        {    
+            WarnsdorffNFoisM(A, 3, m);
+            iter++;
+        }while(!TestValideChemin(A, 3, m) && iter < 100);
         if(iter == 100)
+        {
+            printf("Erreur de génération du chemin\n");
             return false;
-        else
-            return true;  
+        }
+        return true;
    }
 
    //Pour m>12, on utilise la méthode du diviser pour régner
@@ -530,14 +561,16 @@ bool ArbitraireTroisFoisM(int m)
 
    //On génére l'échiquier "principal" de taille 9<=m<=12
    iter=0;
-   while(!WarnsdorffNFoisM(tmp, 3, k) && iter < 100)
-        {iter++;}  
+   do
+   {
+        WarnsdorffNFoisM(tmp, 3, k);
+        iter++;
+   }while(!TestValideChemin(tmp, 3, k) && iter < 100);
     if(iter == 100)
     {
         printf("Erreur de génération du chemin\n");
-        free(A);
         free(tmp);
-        return false;  
+        return false;
     }
    //On ajoute l'échiquier généré dans le vecteur A 
    for(int i=0; i<3*k;i++)
@@ -584,21 +617,10 @@ bool ArbitraireTroisFoisM(int m)
                 A[x*m+y] += 12; 
         }
    }
-   PrintBoard(A,3,m);
-
-   if(TestValideRect(A, 3, m))
-   {
-       free(A);
-       free(tmp);
-       return true;
-   }
-   else
-   {
-       free(A);
-       free(tmp);
-       return false;
-   }
+   free(tmp);
+   return true;
 } 
+
 //imprime dans un fichier "chemin.txt" un chemin valide sous la forme d'un échiquier
 //dont les cases sont numérotées dans leur ordre de passage
 //A contient la matrice
@@ -624,7 +646,7 @@ void PrintBoard(int* A, int n, int m)
     fprintf(fp,"Echiquier de taille %d * %d\n",n,m);
    
     int tmptest = 0;
-    for(int i=0; i<3; i++)
+    for(int i=0; i<n; i++)
     {       
         for(int j=0; j<m; j++)
         {
