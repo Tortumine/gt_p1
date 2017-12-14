@@ -2,6 +2,7 @@
 // Created by tortumine on 8/12/17.
 //
 #include <printf.h>
+#include <omp.h>
 #include "cavalier.h"
 
 
@@ -17,14 +18,22 @@ void BruteForceChemins(int m,int n,GRAPHE* monGraphe)
     printf("-------------------\nBrute Force Chemins\n-------------------\n",m,n,tmp);
     printf("En cours de calcul...\n%d cases dans la grille\n",m*n);
 
-    for(i=0;i<m*n;i++)
+    omp_set_dynamic(0);
+    omp_set_num_threads(4);
+#pragma omp parallel
     {
-        result[i]=bruteforceChemin(n,m,monGraphe,i);
-        tmp=tmp+result[i];
+#pragma omp critical
+           printf("%d\n",omp_get_num_threads());
 
-        printf("%d/%d\n",i+1,n*m);
+#pragma omp for
+        for(i=0;i<m*n;i++)
+        {
+            result[i]=bruteforceChemin(n,m,monGraphe,i);
+            tmp=tmp+result[i];
+
+            printf("%d/%d\n",i+1,n*m);
+        }
     }
-
 
     printf("\nNombre de chemins trouvés dans une grille %d x %d : %d\n",m,n,tmp);
     printf("Nombre de chemins possibles en fonction de la case de départ:\n\n");
