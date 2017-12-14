@@ -15,22 +15,25 @@ void BruteForceChemins(int m,int n,GRAPHE* monGraphe)
 
     result=malloc(n*m*(sizeof(int)));
     printf("-------------------\nBrute Force Chemins\n-------------------\n",m,n,tmp);
+    printf("En cours de calcul...\n%d cases dans la grille\n",m*n);
 
     for(i=0;i<m*n;i++)
     {
         result[i]=bruteforceChemin(n,m,monGraphe,i);
         tmp=tmp+result[i];
+
         printf("%d/%d\n",i+1,n*m);
     }
 
 
     printf("\nNombre de chemins trouvés dans une grille %d x %d : %d\n",m,n,tmp);
-    printf("Détail du resultats: chemins possibles en fonction de la case de départ.\n\n");
+    printf("Nombre de chemins possibles en fonction de la case de départ:\n\n");
     for(j = 0;j<n;j++)
     {
         printf("\t");
         for (k = 0; k < m; k++)
         {
+            //affichage de la case
             printf("% 6d\t",result[k+m*j]);
         }
         printf("\n");
@@ -43,7 +46,9 @@ void BruteForceCircuits(int m,int n,GRAPHE* monGraphe)
     int k=0;
     int tmp=0;
     int* result=malloc(n*m*(sizeof(int)));
-        for(i=0;i<m*n;i++)
+    printf("-------------------\nBrute Force Circuits\n-------------------\n",m,n,tmp);
+
+    for(i=0;i<m*n;i++)
     {
         result[i] = bruteforceCircuit(n,m,monGraphe,i);
         tmp=tmp+result[i];
@@ -51,12 +56,13 @@ void BruteForceCircuits(int m,int n,GRAPHE* monGraphe)
     }
 
     printf("Nombre de circuits trouvés dans une grille %d x %d : %d\n",m,n,tmp);
-    printf("Détail du resultats: circuits possibles en fonction de la case de départ.\n\n");
+    printf("Nombre de circuits possibles en fonction de la case de départ:\n\n");
     for(j = 0;j<n;j++)
     {
         printf("\t");
         for (k = 0; k < m; k++)
         {
+            //affichage de la case
             printf("% 6d\t",result[k+m*j]);
         }
         printf("\n");
@@ -153,14 +159,14 @@ int bruteforceCheminsRec(int origine,int position, GRAPHE* graphe_possible,
 
 int bruteforceCircuitsRec(int origine,int position, GRAPHE* graphe_possible,
                             short* tableau_visites, int hauteur_actuelle,
-                            int hauteur_max, int nombre_circuit)
+                            int hauteur_max, int nombre_circuits)
 {
-    int i=0;
-    tableau_visites[position]=hauteur_actuelle + 1;
-    SOMMET* sommet = graphe_possible->premierSommet;
+    tableau_visites[position]=1;
 
+    int i=0;
     // Ces lignes permettent d'acceder au sommet / la case consernée
     // ATTENTION: ce code n'est pas optimal, l'acces à la position par &(graphe_possible->premiersommet[position]) ne marche pas
+    SOMMET* sommet = graphe_possible->premierSommet;
     for(i=0;i<position;i++)
     {
         sommet=sommet->suivant;
@@ -169,11 +175,13 @@ int bruteforceCircuitsRec(int origine,int position, GRAPHE* graphe_possible,
 
     if(hauteur_actuelle < hauteur_max)
     {
+
+
         while(test != NULL )
         {
             if(tableau_visites[test->dest]==0)
             {
-                nombre_circuit = bruteforceCircuitsRec(origine,test->dest,graphe_possible,tableau_visites,hauteur_actuelle + 1 ,hauteur_max,nombre_circuit);}
+                nombre_circuits = bruteforceCircuitsRec(origine,test->dest,graphe_possible,tableau_visites,hauteur_actuelle + 1 ,hauteur_max,nombre_circuits);}
             test = test->suivant;
         }
     }
@@ -183,12 +191,12 @@ int bruteforceCircuitsRec(int origine,int position, GRAPHE* graphe_possible,
         {
             if(test->dest==origine)
             {
-                nombre_circuit++;
+                nombre_circuits++;
                 break;
             }
             test = test->suivant;
         }
     }
     tableau_visites[position]=0;
-    return nombre_circuit;
+    return nombre_circuits;
 }
