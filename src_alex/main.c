@@ -10,7 +10,6 @@ int main(int argc, char* argv[]) {
     int m=5;
     int n=5;
     int def = 5;
-    int inputM,inputN,inputMode;
 
     if(argc>=2)
     {

@@ -18,7 +18,7 @@ void BruteForceChemins(int m,int n,GRAPHE* monGraphe)
 
     int thread_id, nb_threads;
 
-    printf("-------------------\nBrute Force Chemins\n-------------------\n",m,n,tmp);
+    printf("-------------------\nBrute Force Chemins\n-------------------\n");
     printf("\n%d cases dans la grille\n",grid);
 
 #pragma omp parallel
@@ -46,7 +46,7 @@ void BruteForceChemins(int m,int n,GRAPHE* monGraphe)
         }
     }
 
-    printf("\nNombre de chemins trouvés dans une grille %d x %d : %d\n",m,n,tmp);
+    printf("\n\nNombre de chemins trouvés dans une grille %d x %d : %d\n",m,n,tmp);
     printf("Nombre de chemins possibles en fonction de la case de départ:\n\n");
     for(j = 0;j<n;j++)
     {
@@ -71,31 +71,32 @@ void BruteForceCircuits(int m,int n,GRAPHE* monGraphe)
 
     int thread_id, nb_threads;              //multithreading
 
-    printf("-------------------\nBrute Force Circuits\n-------------------\n",m,n,tmp);
+    printf("--------------------\nBrute Force Circuits\n--------------------\n");
     printf("\n%d cases dans la grille\n",grid);
 
 #pragma omp parallel
-    thread_id = omp_get_thread_num();
-
-    if ( thread_id == 0 ) {
-        nb_threads = omp_get_num_threads();
-        printf("Le calcul se fait sur %d threads\n",nb_threads);
-        printf("Progression: % 2d/%d\t\tSolutions: %d",progress,grid,tmp);
-        fflush(stdout);
-    }
-#pragma omp for
-    for(i=0;i<m*n;i++)
     {
-        result[i] = bruteforceCircuit(n,m,monGraphe,i);
-        tmp=tmp+result[i];
-        //statut du calcul
-        progress=progress+(1/(grid));
-        progress++;
-        printf("\rProgression: % 2d/%d\t\tSolutions: %d",progress,grid,tmp);
-        fflush(stdout);
-    }
+        thread_id = omp_get_thread_num();
 
-    printf("Nombre de circuits trouvés dans une grille %d x %d : %d\n",m,n,tmp);
+        if (thread_id == 1) {
+            nb_threads = omp_get_num_threads();
+            printf("Le calcul se fait sur %d threads\n", nb_threads);
+            printf("Progression: % 2d/%d\t\tSolutions: %d", progress, grid, tmp);
+            fflush(stdout);
+        }
+
+#pragma omp for
+        for (i = 0; i < m * n; i++) {
+            result[i] = bruteforceCircuit(n, m, monGraphe, i);
+            tmp = tmp + result[i];
+            //statut du calcul
+            progress = progress + (1 / (grid));
+            progress++;
+            printf("\rProgression: % 2d/%d\t\tSolutions: %d", progress, grid, tmp);
+            fflush(stdout);
+        }
+    }
+    printf("\n\nNombre de circuits trouvés dans une grille %d x %d : %d\n",m,n,tmp);
     printf("Nombre de circuits possibles en fonction de la case de départ:\n\n");
     for(j = 0;j<n;j++)
     {
@@ -119,21 +120,15 @@ void BruteForceCircuits(int m,int n,GRAPHE* monGraphe)
 
 int bruteforceChemin(int m, int n,GRAPHE* graph_possible, int origine)
 {
-    //printf("------------------------\n");
-    //printf("   Brute Force Chemins\n");
-    //printf("------------------------\n");
-
     short* tableau_visites={0};
     int hauteur_actuele = 0;
     int nombre_chemins = 0;
-    int  hauteur_max = (int)(m * n - 1);
+    int  hauteur_max = (m * n - 1);
     tableau_visites = malloc(m * n * sizeof(short));
 
     nombre_chemins=bruteforceCheminsRec(origine,origine,graph_possible,tableau_visites,
                          hauteur_actuele,hauteur_max,nombre_chemins);
 
-    //printf("------------------------\n");
-    //printf("Nombre chemins: %d\n",nombre_chemins);
     return nombre_chemins;
 }
 
@@ -141,21 +136,15 @@ int bruteforceChemin(int m, int n,GRAPHE* graph_possible, int origine)
 // en cherchant des circuits euleriens
 int bruteforceCircuit(int m, int n,GRAPHE* graph_possible,int origine)
 {
-    //printf("------------------------\n");
-    //printf("   Brute Force CIrcuits\n");
-    //printf("------------------------\n");
-
     short* tableau_visites={0};
     int hauteur_actuele = 0;
     int nombre_circuits = 0;
-    int  hauteur_max = (int)(m * n - 1);
+    int  hauteur_max = (m * n - 1);
     tableau_visites = malloc(m * n * sizeof(short));
 
     nombre_circuits=bruteforceCircuitsRec(origine,origine,graph_possible,tableau_visites,
                                         hauteur_actuele,hauteur_max,nombre_circuits);
 
-    //printf("------------------------\n");
-    //printf("Nombre chemins: %d\n",nombre_chemins);
     return nombre_circuits;
 }
 //----------------------------------------------------------
