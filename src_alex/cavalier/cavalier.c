@@ -12,26 +12,37 @@ void BruteForceChemins(int m,int n,GRAPHE* monGraphe)
     int j=0;
     int k=0;
     int tmp=0;
-    int* result;
+    int grid = m*n;
+    int progress=0;
+    int* result=malloc(n*m*(sizeof(int)));
 
-    result=malloc(n*m*(sizeof(int)));
+    int thread_id, nb_threads;
+
     printf("-------------------\nBrute Force Chemins\n-------------------\n",m,n,tmp);
-    printf("En cours de calcul...\n%d cases dans la grille\n",m*n);
+    printf("\n%d cases dans la grille\n",grid);
 
-    omp_set_dynamic(0);
-    omp_set_num_threads(4);
 #pragma omp parallel
     {
-#pragma omp critical
-           printf("%d\n",omp_get_num_threads());
+        thread_id = omp_get_thread_num();
+
+        if ( thread_id == 0 ) {
+            nb_threads = omp_get_num_threads();
+            printf("Le calcul se fait sur %d threads\n",nb_threads);
+            printf("Progression: % 2d/%d\t\tSolutions: %d",progress,grid,tmp);
+            fflush(stdout);
+        }
+
 
 #pragma omp for
         for(i=0;i<m*n;i++)
         {
             result[i]=bruteforceChemin(n,m,monGraphe,i);
             tmp=tmp+result[i];
-
-            printf("%d/%d\n",i+1,n*m);
+            //statut du calcul
+            progress=progress+(1/(grid));
+            progress++;
+            printf("\rProgression: % 2d/%d\t\tSolutions: %d",progress,grid,tmp);
+            fflush(stdout);
         }
     }
 
@@ -54,14 +65,34 @@ void BruteForceCircuits(int m,int n,GRAPHE* monGraphe)
     int j=0;
     int k=0;
     int tmp=0;
+    int grid = m*n;                         //évite des calculs rondondants
+    int progress=0;                         //statut du calcul
     int* result=malloc(n*m*(sizeof(int)));
-    printf("-------------------\nBrute Force Circuits\n-------------------\n",m,n,tmp);
 
+    int thread_id, nb_threads;              //multithreading
+
+    printf("-------------------\nBrute Force Circuits\n-------------------\n",m,n,tmp);
+    printf("\n%d cases dans la grille\n",grid);
+
+#pragma omp parallel
+    thread_id = omp_get_thread_num();
+
+    if ( thread_id == 0 ) {
+        nb_threads = omp_get_num_threads();
+        printf("Le calcul se fait sur %d threads\n",nb_threads);
+        printf("Progression: % 2d/%d\t\tSolutions: %d",progress,grid,tmp);
+        fflush(stdout);
+    }
+#pragma omp for
     for(i=0;i<m*n;i++)
     {
         result[i] = bruteforceCircuit(n,m,monGraphe,i);
         tmp=tmp+result[i];
-        printf("%d/%d\n",i+1,n*m);
+        //statut du calcul
+        progress=progress+(1/(grid));
+        progress++;
+        printf("\rProgression: % 2d/%d\t\tSolutions: %d",progress,grid,tmp);
+        fflush(stdout);
     }
 
     printf("Nombre de circuits trouvés dans une grille %d x %d : %d\n",m,n,tmp);
