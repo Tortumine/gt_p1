@@ -1,5 +1,24 @@
 \section{Annexe}
+\subsection{Compilation}
+La compilation se fait en utilisant cmake et make.
 
+Depuis le répertoire source:
+\begin{itemize}
+\item mkdir build
+\item cd build
+\item cmake ..
+\item make
+\end{itemize}
+\subsection{Execution}
+Deux exécutables sont généres, \textbf{path} et \textbf{path_all}
+
+\paragraph{path}
+\paragraph{path_all} peut predre jusqu'à 3 arguments. Si ils sont mal passés l'application utilisera les arguments par défaut (-o 5 5).
+\begin{itemize}
+\item Type de parcourt ouvert (-o) ou fermé (-c)
+\item Largeur de la grille (u_int)
+\item Hauteur de la grille (u_int)
+\end{itemize}
 \subsection{Sources}
 \begin{itemize}
   \item \textbf{Wikipedia: Problème du cavalier} https://fr.wikipedia.org/wiki/Probl%C3%A8me_du_cavalier
