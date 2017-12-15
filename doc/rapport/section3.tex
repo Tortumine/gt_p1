@@ -18,6 +18,18 @@ Cet algorithme de parcourt récursif est appelé pour chaque case de départ pos
 \end{table}
 
 Afin de minimiser les temps de calcul, le lancement de la fonction de parcourt se fait en multithreading via l'API OpenMP. Celle-ci est intégrée au compilateur gcc. Les threads générés se partagent les cases de départ. De cette maière, les temps de calcul peuvent-être diminués.
+
+\begin{table}[H]
+\centering
+\caption{Temps de calcul pour des grilles carrées}
+\label{my-label1}
+\begin{tabular}{llll}
+\cline{1-1}
+\multicolumn{1}{|l|}{Taille de l'échiquier} & 4 & 5     & 6        \\ \cline{1-1}
+Temps de calcul                             &   & 1,5 s & 560m 30s
+\end{tabular}
+\end{table}
+
 \subsection{Génération de chemins et circuits hamiltoniens}
 Pour la partie du code concernant la génération de circuits et chemins sur des échiquiers de taille variable, nous avons implémenté trois fonctions, pour les trois algorithmes sélectionnés :
 \begin{itemize}
