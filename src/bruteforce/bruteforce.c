@@ -3,7 +3,7 @@
 //
 #include <printf.h>
 #include <omp.h>
-#include "cavalier.h"
+#include "bruteforce.h"
 
 
 void BruteForceChemins(int m,int n,GRAPHE* monGraphe)

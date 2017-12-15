@@ -11,12 +11,11 @@ set(CMAKE_C_STANDARD 99)
 
 
 add_subdirectory(graphes)
-add_subdirectory(cavalier)
-
+add_subdirectory(bruteforce)
+add_subdirectory(warnsdorf)
 
 add_executable(path path.c)
-target_link_libraries(path cavalier)
-
 add_executable(path_all path_all.c)
-target_link_libraries(path_all graphes cavalier)
+target_link_libraries(path warnsdorf)
+target_link_libraries(path_all graphes bruteforce)
 

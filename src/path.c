@@ -3,7 +3,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "cavalier/warnsdorf.h"
+#include "warnsdorf/warnsdorf.h"
 
 #define iterMax 100
 

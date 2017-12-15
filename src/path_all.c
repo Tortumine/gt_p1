@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "graphes/graphes.h"
-#include "cavalier/cavalier.h"
+#include "bruteforce/bruteforce.h"
 
 int main(int argc, char* argv[]) {
 
