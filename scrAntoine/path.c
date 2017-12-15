@@ -3,8 +3,6 @@
 #include <time.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "graphes/graphes.h"
-#include "cavalier/cavalier.h"
 #include "cavalier/warnsdorf.h"
 
 #define iterMax 100
