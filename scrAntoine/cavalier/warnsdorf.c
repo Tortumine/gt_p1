@@ -8,9 +8,6 @@
 #include <stdbool.h>
 #include <time.h>
 #include "warnsdorf.h"
-#include "../graphes/graphes.h"
-#include "../graphes/graphes.c"
-
 
 //Génération de chemin hamiltonnien représentant les mouvements du cavalier sur un échiquier carré
 //Graphe stocké sous forme de matrice

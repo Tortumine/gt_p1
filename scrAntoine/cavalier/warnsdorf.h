@@ -1,6 +1,5 @@
 //created by antoine sadzot
 #include <stdbool.h>
-#include "../graphes/graphes.h"
 
 //Retranscription de l'algorithme de Douglas Squirrel, inspiré de l'heurisitque de Warnsdorff
 //Pour un échiquier carré de taille m*m, génère un chemin hamiltonien 
