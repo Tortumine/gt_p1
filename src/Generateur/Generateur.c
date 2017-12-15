@@ -557,7 +557,6 @@ bool ArbitraireTroisFoisM(int* A, int m)
    k = ((m-9)%4)+9;//Détermination de k, au départ Compris entre 9 et 12
    echiquiers=(m-k)/4;//Echiquiers est le nombre de petits echiquiers
    tmp = malloc(3*k*sizeof(int));
-
    //On génére l'échiquier "principal" de taille 9<=m<=12
    iter=0;
    do
@@ -579,9 +578,10 @@ bool ArbitraireTroisFoisM(int* A, int m)
        A[x*m+y] = tmp[i];
    }  
    //On ajoute chaque échiquier 3*4 l'un après l'autre
+   k-=4;
    for(int j=0; j < echiquiers;j++)
    {
-        k+=(j*4);
+        k+=4;
         //On choisit entre deux cases précises celle qui va "précéder" dans l'ordre de parcours
         //le nouvel échiquier 3*4. La seconde case sera la case de retour
         if(A[2*m+(k-1)] > A[k-2])

@@ -16,25 +16,6 @@ int main() {
     int imprim = 1;
     int continuer = 111;
     bool reussi = true;
-    double iterTest;
-    int j;
-    //circuit
-    /*A=malloc(8*8*sizeof(int));
-    do{
-
-        WarnsdorffNFoisM(A,8,8);
-    }while(!TestValideCircuit(A,8,8));
-    PrintBoard(A,8,8);
-    //chemin
-    Squirrel(A,8);
-    PrintBoard(A,8,8);
-    //3*m
-    A=malloc(3*16*sizeof(int));
-    ArbitraireTroisFoisM(A,16);
-    PrintBoard(A,3,16);
-    free(A);
-
-    return 0;*/
     while(continuer == 111 || continuer == 79)
     {
     printf("Programme de résolution du probleme du cavalier\n\n");
@@ -174,6 +155,7 @@ int main() {
     {
         PrintBoard(A,n, m);
     }
+    imprim=1;
     free(A);
     do{
         printf("\nVoulez vous recommencer? (o/n) : ");
