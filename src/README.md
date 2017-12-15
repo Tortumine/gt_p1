@@ -4,4 +4,5 @@
 2. mkdir build_directory
 3. cd build_directory
 4. cmake ..
-5. ./executable_name
+5. make
+6. ./executable_name
