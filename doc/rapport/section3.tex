@@ -2,6 +2,7 @@
 \subsection{BruteForce}
 L'implémentation de l’algorithme d’énumération de chemins et circuits par force brute utilise la librairie de gestions de graphes mise à disposition des étudiants sur le site discmath. Toute interaction de l’application se fait en ligne de commande via les arguments de l’exécutable. L’utilisateur peut ainsi choisir le type de parcourt ouvert ou fermé ainsi que la taille de l’échiquier en X et en Y.  Cela permet la création de scripts pour automatiser l’exécution qui peut prendre un temps considérable pour des tailles importantes d’échiquier.
 Lors de l’initialisation, un graphe représentant les cases accessibles à partir de chaque case est crée. Ensuite une fonction récursive parcourt ce graphe en fonction de la liste d’adjacence de chaque nœud et des cases déjà visitées.
+
 Cet algorithme de parcourt récursif est appelé pour chaque case de départ possible. Cela permet de créer un tableau montrant le nombre de chemins existants en fonction de la position de départ. L’utilisateur peut voir l’évolution du calcul en temps réel dans le terminal.
 \begin{table}[H]
 \centering
@@ -17,3 +18,5 @@ Cet algorithme de parcourt récursif est appelé pour chaque case de départ pos
 \end{table}
 
 Afin de minimiser les temps de calcul, le lancement de la fonction de parcourt se fait en multithreading via OpenMP. Ainsi un thread travaille sur chaque case initiale possible.
+
+Afin de minimiser les temps de calcul, le lancement de la fonction de parcourt se fait en multithreading via OpenMP. Ainsi un thread travaille sur chaque case initiale possible. Le multithreading permet de passer de 2 minutes 10 secondes à 40 secondes avec un processeur 4 coeurs pour un tablau 5*6(3,25 fois plus rapide).
