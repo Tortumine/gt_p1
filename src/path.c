@@ -3,18 +3,38 @@
 #include <time.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "warnsdorf/warnsdorf.h"
+#include "Generateur/Generateur.h"
 
 #define iterMax 100
 
 int main() {
     srand(time(NULL));
     int choix;
-    int m,n, iterations;
+    int m,n;
+    int iterations;
     int* A;
     int imprim = 1;
     int continuer = 111;
     bool reussi = true;
+    double iterTest;
+    int j;
+    //circuit
+    /*A=malloc(8*8*sizeof(int));
+    do{
+
+        WarnsdorffNFoisM(A,8,8);
+    }while(!TestValideCircuit(A,8,8));
+    PrintBoard(A,8,8);
+    //chemin
+    Squirrel(A,8);
+    PrintBoard(A,8,8);
+    //3*m
+    A=malloc(3*16*sizeof(int));
+    ArbitraireTroisFoisM(A,16);
+    PrintBoard(A,3,16);
+    free(A);
+
+    return 0;*/
     while(continuer == 111 || continuer == 79)
     {
     printf("Programme de résolution du probleme du cavalier\n\n");
@@ -80,8 +100,8 @@ int main() {
             {
                 WarnsdorffNFoisM(A,n,m);
                 iterations++;
-            }while(iterations < 10000 && !TestValideCircuit(A,n,m));
-            if(iterations == 10000)
+            }while(iterations < 100000 && !TestValideCircuit(A,n,m));
+            if(iterations == 100000)
                 printf("Aucun circuit n'a ete trouve apres %d iterations\n",iterations);
             else
                 printf("Un circuit a ete trouve apres %d iteration(s)\n",iterations);
@@ -145,7 +165,7 @@ int main() {
     }
     if(imprim == 1)
         do{ 
-            printf("\nVoulez vous imprimer le résultat dans le fichier Chemin.txt? (o/n) : ");
+            printf("\nVoulez vous imprimer le résultat dans le fichier Resultat.txt? (o/n) : ");
             do
                 imprim = getchar();
             while(isspace(imprim));

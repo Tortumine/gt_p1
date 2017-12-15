@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-#include "warnsdorf.h"
+#include "Generateur.h"
 
 //Génération de chemin hamiltonnien représentant les mouvements du cavalier sur un échiquier carré
 //Graphe stocké sous forme de matrice
@@ -517,8 +517,10 @@ bool ArbitraireTroisFoisM(int* A, int m)
    //Basé en partie sur la fonction WarnsdorffNFoisM
    int iter=0;//variable utilisée pour la génération de chemin pour m<=12
 
-   //aucun parcours n'existe pour ces dimensions d'échiquiers
-   
+   for(int i=0;i<3*m;i++)
+   {
+       A[i]=-1;
+   }
    //pour un échiquier plus petit que 10 et ne satisfaisant pas les conditions précédentes,
    //Le parcours est généré en une fois
    if(m <= 12)
@@ -634,7 +636,7 @@ void PrintBoard(int* A, int n, int m)
         return;
     }
 
-    fp=fopen("Chemin.txt","w");
+    fp=fopen("Resultats.txt","w");
     if(fp == NULL)
     {
         printf("Erreur ouverture du fichier");
