@@ -3,14 +3,15 @@
 #include <time.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include "warnsdorf/warnsdorf.h"
+#include "Generateur/Generateur.h"
 
 #define iterMax 100
 
 int main() {
     srand(time(NULL));
     int choix;
-    int m,n, iterations;
+    int m,n;
+    int iterations;
     int* A;
     int imprim = 1;
     int continuer = 111;
@@ -80,8 +81,8 @@ int main() {
             {
                 WarnsdorffNFoisM(A,n,m);
                 iterations++;
-            }while(iterations < 10000 && !TestValideCircuit(A,n,m));
-            if(iterations == 10000)
+            }while(iterations < 100000 && !TestValideCircuit(A,n,m));
+            if(iterations == 100000)
                 printf("Aucun circuit n'a ete trouve apres %d iterations\n",iterations);
             else
                 printf("Un circuit a ete trouve apres %d iteration(s)\n",iterations);
@@ -145,7 +146,7 @@ int main() {
     }
     if(imprim == 1)
         do{ 
-            printf("\nVoulez vous imprimer le résultat dans le fichier Chemin.txt? (o/n) : ");
+            printf("\nVoulez vous imprimer le résultat dans le fichier Resultat.txt? (o/n) : ");
             do
                 imprim = getchar();
             while(isspace(imprim));
@@ -154,6 +155,7 @@ int main() {
     {
         PrintBoard(A,n, m);
     }
+    imprim=1;
     free(A);
     do{
         printf("\nVoulez vous recommencer? (o/n) : ");

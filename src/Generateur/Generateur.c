@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
-#include "warnsdorf.h"
+#include "Generateur.h"
 
 //Génération de chemin hamiltonnien représentant les mouvements du cavalier sur un échiquier carré
 //Graphe stocké sous forme de matrice
@@ -517,8 +517,10 @@ bool ArbitraireTroisFoisM(int* A, int m)
    //Basé en partie sur la fonction WarnsdorffNFoisM
    int iter=0;//variable utilisée pour la génération de chemin pour m<=12
 
-   //aucun parcours n'existe pour ces dimensions d'échiquiers
-   
+   for(int i=0;i<3*m;i++)
+   {
+       A[i]=-1;
+   }
    //pour un échiquier plus petit que 10 et ne satisfaisant pas les conditions précédentes,
    //Le parcours est généré en une fois
    if(m <= 12)
@@ -555,7 +557,6 @@ bool ArbitraireTroisFoisM(int* A, int m)
    k = ((m-9)%4)+9;//Détermination de k, au départ Compris entre 9 et 12
    echiquiers=(m-k)/4;//Echiquiers est le nombre de petits echiquiers
    tmp = malloc(3*k*sizeof(int));
-
    //On génére l'échiquier "principal" de taille 9<=m<=12
    iter=0;
    do
@@ -577,9 +578,10 @@ bool ArbitraireTroisFoisM(int* A, int m)
        A[x*m+y] = tmp[i];
    }  
    //On ajoute chaque échiquier 3*4 l'un après l'autre
+   k-=4;
    for(int j=0; j < echiquiers;j++)
    {
-        k+=(j*4);
+        k+=4;
         //On choisit entre deux cases précises celle qui va "précéder" dans l'ordre de parcours
         //le nouvel échiquier 3*4. La seconde case sera la case de retour
         if(A[2*m+(k-1)] > A[k-2])
@@ -634,7 +636,7 @@ void PrintBoard(int* A, int n, int m)
         return;
     }
 
-    fp=fopen("Chemin.txt","w");
+    fp=fopen("Resultats.txt","w");
     if(fp == NULL)
     {
         printf("Erreur ouverture du fichier");

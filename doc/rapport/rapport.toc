@@ -1,0 +1,22 @@
+\select@language {french}
+\contentsline {section}{\numberline {1}Pr\IeC {\'e}sentation du projet}{2}
+\contentsline {subsection}{\numberline {1.1}\IeC {\'E}nonc\IeC {\'e}}{2}
+\contentsline {subsection}{\numberline {1.2}Les bases du probl\IeC {\`e}me du cavalier}{2}
+\contentsline {section}{\numberline {2}Recherches}{3}
+\contentsline {subsection}{\numberline {2.1}Condition d'existence}{3}
+\contentsline {subsection}{\numberline {2.2}Algorithmes de parcourt}{3}
+\contentsline {subsubsection}{\numberline {2.2.1}Force brute}{3}
+\contentsline {subsubsection}{\numberline {2.2.2}Warnsdorf}{3}
+\contentsline {subsubsection}{\numberline {2.2.3}Echiquier rectangulaire}{3}
+\contentsline {subsubsection}{\numberline {2.2.4}R\IeC {\'e}seaux neuronaux}{4}
+\contentsline {section}{\numberline {3}Impl\IeC {\'e}mentation}{4}
+\contentsline {subsection}{\numberline {3.1}G\IeC {\'e}n\IeC {\'e}ration de chemins et circuits hamiltoniens}{4}
+\contentsline {subsubsection}{\numberline {3.1.1}G\IeC {\'e}n\IeC {\'e}ration de parcours et chemins}{4}
+\contentsline {subsubsection}{\numberline {3.1.2}Test de la validit\IeC {\'e} des parcours et chemins}{4}
+\contentsline {subsubsection}{\numberline {3.1.3}Affichage du r\IeC {\'e}sultat}{5}
+\contentsline {section}{\numberline {4}Tests de performance}{5}
+\contentsline {subsection}{\numberline {4.1}G\IeC {\'e}n\IeC {\'e}ration de chemins et circuits hamiltoniens}{5}
+\contentsline {subsubsection}{\numberline {4.1.1}Chemins et circuits avec l'heuristique de Warnsdorff}{5}
+\contentsline {subsubsection}{\numberline {4.1.2}chemins hamiltoniens avec l'algorithme de Squirrel}{7}
+\contentsline {subsubsection}{\numberline {4.1.3}Algorithme de Shun-Shii}{7}
+\contentsline {section}{\numberline {5}Conclusion}{7}
